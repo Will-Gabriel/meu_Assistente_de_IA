@@ -1,11 +1,6 @@
-# Inmporta módulo para interagir com o sistema operacional
-import os
-
-# Importa a biblioteca Streamlit para criar a interface web interativa
-import streamlit as st
-
-# Importa a classe Groq para se conectar à API da plataforma Groq e acessar o LLM
-from groq import Groq
+import os   # Importa módulo para interagir com o SO
+import streamlit as st  # Importa a biblioteca Streamlit para criar a interface web
+from groq import Groq   # Importa a classe Groq para se conectar à API da plataforma Groq e acessar o LLM
 
 # configura a página do Streamlit com Título, ione, layout e estado inicial da sidebar
 st.set_page_config (
@@ -26,7 +21,7 @@ REGRAS DE OPERAÇÃO:
     * **Exemplo de Código**: Forneça um ou mais blocos de código em Python com a sintaxe correta. O código deve ser bem comentado para explicar as partes importantes.
     * **Detalhes do Código**: Após o bloco de código, descreva em detalhes o que cada parte do código faz, explicando a lógica e as funções utilizadas.
     * **Documentação de Referência**: Ao final, inclua uma seção chamada "📚 Documentação de Referência" com o link direto e relevante para a documentação oficial da Linguagem Python (docs.python.org) ou da biblioteca em questão.
-3. **Clareza e Precisão**: Use uma linguagem clara. Evite jarções desnecessários. Suas respostas devem ser tecnicamente precisas.
+3. **Clareza e Precisão**: Use uma linguagem clara. Evite jargões desnecessários. Suas respostas devem ser tecnicamente precisas.
 """
 
 # Cria o conteúdo da barra lateral no Streamlit

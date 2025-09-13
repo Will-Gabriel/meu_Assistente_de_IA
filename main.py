@@ -2,7 +2,8 @@ import os   # Importa módulo para interagir com o SO
 import streamlit as st  # Importa a biblioteca Streamlit para criar a interface web
 from groq import Groq   # Importa a classe Groq para se conectar à API da plataforma Groq e acessar o LLM
 
-# configura a página do Streamlit com Título, ione, layout e estado inicial da sidebar
+
+# configura a página do Streamlit com Título, icone, layout e estado inicial da sidebar
 st.set_page_config (
     page_title = "WG AI Coder",
     page_icon = "🤖",
@@ -26,7 +27,7 @@ REGRAS DE OPERAÇÃO:
 
 # Cria o conteúdo da barra lateral no Streamlit
 with st.sidebar:
-    # define o título da barra lateral
+    # Define o título da barra lateral
     st.title("🤖 WG AI Coder")
 
     # Mostra um texto explicativo sobre o assistente
@@ -66,3 +67,74 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
+# Inicializa a variável do cliente Groq como None
+client = None
+
+# Verifica se o usuário forneceu a chave de API da Groq
+if groq_api_key:
+    try:
+        # Cria o cliente Groq com a chave de API fornecida
+        client = Groq(api_key = groq_api_key)
+    except Exception as error:
+        # Exibe erro caso ocorra problema ao inicializar o cliente
+        st.sidebar.error(f"Erro ao inicializar o cliente groq: {error}")
+        st.stop()
+
+# Caso não tenha chave, mas já existam mensagens, mostra o aviso
+elif st.session_state.messages:
+    st.warning("Por favor, insira sua API Key da Groq na barra lateral para continuar.")
+
+# Captura a entrada do usuário no chat
+if prompt := st.chat_input("Qual é a sua dúvida sobre Python?"):
+    # Se naõ ouver cliente válido, mostra o aviso e para a execução
+    if not client:
+        st.warning("Por favor, insira sua API Key da Groq na barra lateral para continuar.")
+        st.stop()
+
+    # Armazena a mensagem do usuário no estado da sessão
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    # Exibe a mensagem do usuário no chat
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    
+    # Prepara as mensagens para enviar à API, incluindo prompt de sistema
+    messages_for_api = [{"role": "system", "content": CUSTOM_PROMPT}]
+    for msg in st.session_state.messages:
+        messages_for_api.append(msg)
+
+    # Cria a resposta do assistente no chat
+    with st.chat_message("assistant"):
+        with st.spinner("Analisando sua pergunta..."):
+            try:
+                # Chama a API da Groq para gerar a resposta do assistente
+                chat_completion = client.chat.completions.create(
+                    messages = messages_for_api,
+                    model = "openai/gpt-oss-20b",
+                    temperature = 0.8,
+                    max_tokens = 2048,
+                )
+            
+                # Extrai a resposta gerada pela API
+                wg_ai_response = chat_completion.choices[0].message.content
+
+                # Exibe a resposta no Streamlit
+                st.markdown(wg_ai_response)
+
+                # Armazena a resposta do assitente no estado da sessão
+                st.session_state.messages.append({"role": "assistant", "content": wg_ai_response})
+
+            # Caso ocorra erro na comunicação com a API, exibe uma mensagem de erro
+            except Exception as error:
+                st.error(f"Ocorreu um erro ao se comunicar com a API da Groq: {error}")
+            
+st.markdown(
+    """
+    <div style="text-align: center; color: gray;">
+        <hr>
+        <p>WG Ai Coder - Desenvolvido por Wilian Gabriel para fins de estudo pessoal!</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)

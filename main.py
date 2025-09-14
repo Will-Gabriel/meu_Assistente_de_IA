@@ -36,25 +36,24 @@ with st.sidebar:
     # Campo para inserir a chave de API da Groq
     groq_api_key = st.text_input (
         "Insira sua API Key Groq",
-        tupe = "password",
+        type = "password",
         help = "Caso ainda não possua sua chave de API, basta criar em https://console.groq.com/keys"
     )
 
     # Adcionar linha divisória e explicações extras na barra lateral
     st.markdown("---")
-    st.markdown("Desenvolvi essa IA para auxiliar você em suas dúvidas de programação com Linguagem Python. Lembre-se que, a IA pode cometer erros. Sempre verifique e teste suas respostas!")
+    st.markdown("Desenvolvi essa IA Coder para me auxiliar e também auxiliar outros estudantes, ajudando em suas dúvidas de programação com Linguagem Python. Lembre-se que, a IA pode cometer erros. Sempre verifique e teste suas respostas!")
 
     st.markdown("---")
-    st.markdown("Acesse meu LinkedIn e conecte-se comigo!")
+    st.markdown("Acesse meu Linkedin e conecte-se comigo!")
     st.markdown("[Linkedin - Wilian Gabriel](https://www.linkedin.com/in/will-gabriel/)", unsafe_allow_html=True)
-    # st.markdown('<a href="https://www.linkedin.com/in/will-gabriel/" target="_blank">Acesse meu LinkedIn e conecte-se comigo.</a>',
-    # unsafe_allow_html=True)
+    # st.markdown('<a href="https://www.linkedin.com/in/will-gabriel/" target="_blank">Acesse meu LinkedIn e conecte-se comigo.</a>', unsafe_allow_html=True)
 
 # Título da Página Principal
 st.title("🤖 WG AI Coder")
 
 # Subtitulo adicional
-st.title("Seu assistente pessoal de Programação Python 🐍")
+st.title("Assistente pessoal de Programação Python 🐍")
 
 # Texto auxiliar abaixo do título
 st.caption("Faça sua pergunta sobre a linguagem Python e obtenha código, explicações e referências.")
@@ -112,7 +111,7 @@ if prompt := st.chat_input("Qual é a sua dúvida sobre Python?"):
                 chat_completion = client.chat.completions.create(
                     messages = messages_for_api,
                     model = "openai/gpt-oss-20b",
-                    temperature = 0.8,
+                    temperature = 1.0,
                     max_tokens = 2048,
                 )
             
